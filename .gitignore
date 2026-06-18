@@ -1,0 +1,12 @@
+target/
+*.jar
+*.class
+
+.idea/
+.vscode/
+
+*.log
+
+docker-data/
+
+.env

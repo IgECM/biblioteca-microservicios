@@ -1,0 +1,97 @@
+services:
+
+  postgres:
+    image: postgres:15
+    container_name: biblioteca-postgres
+    environment:
+      POSTGRES_DB: biblioteca
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - biblioteca-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  ms-usuarios:
+    build: ./ms-usuarios
+    container_name: ms-usuarios
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - biblioteca-net
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/biblioteca
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+
+  ms-libros:
+    build: ./ms-libros
+    container_name: ms-libros
+    ports:
+      - "8082:8082"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - biblioteca-net
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/biblioteca
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+
+  ms-prestamos:
+    build: ./ms-prestamos
+    container_name: ms-prestamos
+    ports:
+      - "8083:8083"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - biblioteca-net
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/biblioteca
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+
+  ms-devoluciones:
+    build: ./ms-devoluciones
+    container_name: ms-devoluciones
+    ports:
+      - "8084:8084"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - biblioteca-net
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/biblioteca
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+
+  ms-notificaciones:
+    build: ./ms-notificaciones
+    container_name: ms-notificaciones
+    ports:
+      - "8085:8085"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - biblioteca-net
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/biblioteca
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+
+networks:
+  biblioteca-net:
+    driver: bridge
