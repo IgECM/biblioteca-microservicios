@@ -1,6 +1,7 @@
 package com.biblioteca.ms_usuarios.controller;
 
-import com.biblioteca.ms_usuarios.model.Usuario;
+import com.biblioteca.ms_usuarios.dto.UsuarioRequestDTO;
+import com.biblioteca.ms_usuarios.dto.UsuarioResponseDTO;
 import com.biblioteca.ms_usuarios.service.UsuarioService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,23 +18,23 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public List<Usuario> listarUsuarios() {
+    public List<UsuarioResponseDTO> listarUsuarios() {
         return service.obtenerUsuarios();
     }
 
     @GetMapping("/{id}")
-    public Usuario obtenerUsuario(@PathVariable Long id) {
+    public UsuarioResponseDTO obtenerUsuario(@PathVariable Long id) {
         return service.obtenerUsuarioPorId(id);
     }
 
     @PostMapping
-    public Usuario guardarUsuario(@RequestBody Usuario usuario) {
+    public UsuarioResponseDTO guardarUsuario(@RequestBody UsuarioRequestDTO usuario) {
         return service.guardarUsuario(usuario);
     }
 
     @PutMapping("/{id}")
-    public Usuario actualizarUsuario(@PathVariable Long id,
-                                     @RequestBody Usuario usuario) {
+    public UsuarioResponseDTO actualizarUsuario(@PathVariable Long id,
+                                                 @RequestBody UsuarioRequestDTO usuario) {
         return service.actualizarUsuario(id, usuario);
     }
 
