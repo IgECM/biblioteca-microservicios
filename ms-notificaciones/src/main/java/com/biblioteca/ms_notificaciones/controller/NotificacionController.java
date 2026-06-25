@@ -1,6 +1,7 @@
 package com.biblioteca.ms_notificaciones.controller;
 
-import com.biblioteca.ms_notificaciones.model.Notificacion;
+import com.biblioteca.ms_notificaciones.dto.NotificacionRequestDTO;
+import com.biblioteca.ms_notificaciones.dto.NotificacionResponseDTO;
 import com.biblioteca.ms_notificaciones.service.NotificacionService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,23 +18,23 @@ public class NotificacionController {
     }
 
     @GetMapping
-    public List<Notificacion> listarNotificaciones() {
+    public List<NotificacionResponseDTO> listarNotificaciones() {
         return service.obtenerNotificaciones();
     }
 
     @GetMapping("/{id}")
-    public Notificacion obtenerNotificacion(@PathVariable Long id) {
+    public NotificacionResponseDTO obtenerNotificacion(@PathVariable Long id) {
         return service.obtenerNotificacionPorId(id);
     }
 
     @PostMapping
-    public Notificacion guardarNotificacion(@RequestBody Notificacion notificacion) {
+    public NotificacionResponseDTO guardarNotificacion(@RequestBody NotificacionRequestDTO notificacion) {
         return service.guardarNotificacion(notificacion);
     }
 
     @PutMapping("/{id}")
-    public Notificacion actualizarNotificacion(@PathVariable Long id,
-                                               @RequestBody Notificacion notificacion) {
+    public NotificacionResponseDTO actualizarNotificacion(@PathVariable Long id,
+                                                           @RequestBody NotificacionRequestDTO notificacion) {
         return service.actualizarNotificacion(id, notificacion);
     }
 

@@ -1,6 +1,7 @@
 package com.biblioteca.ms_libros.controller;
 
-import com.biblioteca.ms_libros.model.Libro;
+import com.biblioteca.ms_libros.dto.LibroRequestDTO;
+import com.biblioteca.ms_libros.dto.LibroResponseDTO;
 import com.biblioteca.ms_libros.service.LibroService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,23 +18,23 @@ public class LibroController {
     }
 
     @GetMapping
-    public List<Libro> listarLibros() {
+    public List<LibroResponseDTO> listarLibros() {
         return service.obtenerLibros();
     }
 
     @GetMapping("/{id}")
-    public Libro obtenerLibro(@PathVariable Long id) {
+    public LibroResponseDTO obtenerLibro(@PathVariable Long id) {
         return service.obtenerLibroPorId(id);
     }
 
     @PostMapping
-    public Libro guardarLibro(@RequestBody Libro libro) {
+    public LibroResponseDTO guardarLibro(@RequestBody LibroRequestDTO libro) {
         return service.guardarLibro(libro);
     }
 
     @PutMapping("/{id}")
-    public Libro actualizarLibro(@PathVariable Long id,
-                                 @RequestBody Libro libro) {
+    public LibroResponseDTO actualizarLibro(@PathVariable Long id,
+                                             @RequestBody LibroRequestDTO libro) {
         return service.actualizarLibro(id, libro);
     }
 

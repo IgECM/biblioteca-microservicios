@@ -1,6 +1,7 @@
 package com.biblioteca.ms_devoluciones.controller;
 
-import com.biblioteca.ms_devoluciones.model.Devolucion;
+import com.biblioteca.ms_devoluciones.dto.DevolucionRequestDTO;
+import com.biblioteca.ms_devoluciones.dto.DevolucionResponseDTO;
 import com.biblioteca.ms_devoluciones.service.DevolucionService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,23 +18,23 @@ public class DevolucionController {
     }
 
     @GetMapping
-    public List<Devolucion> listarDevoluciones() {
+    public List<DevolucionResponseDTO> listarDevoluciones() {
         return service.obtenerDevoluciones();
     }
 
     @GetMapping("/{id}")
-    public Devolucion obtenerDevolucion(@PathVariable Long id) {
+    public DevolucionResponseDTO obtenerDevolucion(@PathVariable Long id) {
         return service.obtenerDevolucionPorId(id);
     }
 
     @PostMapping
-    public Devolucion guardarDevolucion(@RequestBody Devolucion devolucion) {
+    public DevolucionResponseDTO guardarDevolucion(@RequestBody DevolucionRequestDTO devolucion) {
         return service.guardarDevolucion(devolucion);
     }
 
     @PutMapping("/{id}")
-    public Devolucion actualizarDevolucion(@PathVariable Long id,
-                                           @RequestBody Devolucion devolucion) {
+    public DevolucionResponseDTO actualizarDevolucion(@PathVariable Long id,
+                                                       @RequestBody DevolucionRequestDTO devolucion) {
         return service.actualizarDevolucion(id, devolucion);
     }
 

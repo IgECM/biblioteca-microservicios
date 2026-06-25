@@ -1,6 +1,7 @@
 package com.biblioteca.ms_prestamos.controller;
 
-import com.biblioteca.ms_prestamos.model.Prestamo;
+import com.biblioteca.ms_prestamos.dto.PrestamoRequestDTO;
+import com.biblioteca.ms_prestamos.dto.PrestamoResponseDTO;
 import com.biblioteca.ms_prestamos.service.PrestamoService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,23 +18,23 @@ public class PrestamoController {
     }
 
     @GetMapping
-    public List<Prestamo> listarPrestamos() {
+    public List<PrestamoResponseDTO> listarPrestamos() {
         return service.obtenerPrestamos();
     }
 
     @GetMapping("/{id}")
-    public Prestamo obtenerPrestamo(@PathVariable Long id) {
+    public PrestamoResponseDTO obtenerPrestamo(@PathVariable Long id) {
         return service.obtenerPrestamoPorId(id);
     }
 
     @PostMapping
-    public Prestamo guardarPrestamo(@RequestBody Prestamo prestamo) {
+    public PrestamoResponseDTO guardarPrestamo(@RequestBody PrestamoRequestDTO prestamo) {
         return service.guardarPrestamo(prestamo);
     }
 
     @PutMapping("/{id}")
-    public Prestamo actualizarPrestamo(@PathVariable Long id,
-                                       @RequestBody Prestamo prestamo) {
+    public PrestamoResponseDTO actualizarPrestamo(@PathVariable Long id,
+                                                   @RequestBody PrestamoRequestDTO prestamo) {
         return service.actualizarPrestamo(id, prestamo);
     }
 

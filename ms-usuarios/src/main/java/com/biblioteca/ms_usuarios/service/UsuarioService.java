@@ -1,10 +1,13 @@
 package com.biblioteca.ms_usuarios.service;
 
+import com.biblioteca.ms_usuarios.dto.UsuarioRequestDTO;
+import com.biblioteca.ms_usuarios.dto.UsuarioResponseDTO;
 import com.biblioteca.ms_usuarios.model.Usuario;
 import com.biblioteca.ms_usuarios.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService {
@@ -15,27 +18,31 @@ public class UsuarioService {
         this.repository = repository;
     }
 
-    public List<Usuario> obtenerUsuarios() {
-        return repository.findAll();
+    public List<UsuarioResponseDTO> obtenerUsuarios() {
+        return repository.findAll().stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
     }
 
-    public Usuario obtenerUsuarioPorId(Long id) {
-        return repository.findById(id).orElse(null);
+    public UsuarioResponseDTO obtenerUsuarioPorId(Long id) {
+        Usuario usuario = repository.findById(id).orElse(null);
+        return usuario != null ? toResponseDTO(usuario) : null;
     }
 
-    public Usuario guardarUsuario(Usuario usuario) {
-        return repository.save(usuario);
+    public UsuarioResponseDTO guardarUsuario(UsuarioRequestDTO dto) {
+        Usuario usuario = new Usuario();
+        usuario.setNombre(dto.getNombre());
+        usuario.setCorreo(dto.getCorreo());
+        return toResponseDTO(repository.save(usuario));
     }
 
-    public Usuario actualizarUsuario(Long id, Usuario usuario) {
-
+    public UsuarioResponseDTO actualizarUsuario(Long id, UsuarioRequestDTO dto) {
         Usuario usuarioExistente = repository.findById(id).orElse(null);
 
         if (usuarioExistente != null) {
-            usuarioExistente.setNombre(usuario.getNombre());
-            usuarioExistente.setCorreo(usuario.getCorreo());
-
-            return repository.save(usuarioExistente);
+            usuarioExistente.setNombre(dto.getNombre());
+            usuarioExistente.setCorreo(dto.getCorreo());
+            return toResponseDTO(repository.save(usuarioExistente));
         }
 
         return null;
@@ -43,5 +50,9 @@ public class UsuarioService {
 
     public void eliminarUsuario(Long id) {
         repository.deleteById(id);
+    }
+
+    private UsuarioResponseDTO toResponseDTO(Usuario usuario) {
+        return new UsuarioResponseDTO(usuario.getId(), usuario.getNombre(), usuario.getCorreo());
     }
 }
