@@ -1,5 +1,7 @@
 package com.biblioteca.ms_usuarios.service;
 
+import com.biblioteca.ms_usuarios.dto.UsuarioRequestDTO;
+import com.biblioteca.ms_usuarios.dto.UsuarioResponseDTO;
 import com.biblioteca.ms_usuarios.model.Usuario;
 import com.biblioteca.ms_usuarios.repository.UsuarioRepository;
 import org.junit.jupiter.api.Test;
@@ -30,7 +32,7 @@ class UsuarioServiceTest {
         when(repository.findById(1L))
                 .thenReturn(Optional.of(usuario));
 
-        Usuario resultado = service.obtenerUsuarioPorId(1L);
+        UsuarioResponseDTO resultado = service.obtenerUsuarioPorId(1L);
 
         assertNotNull(resultado);
         assertEquals("Juan", resultado.getNombre());
@@ -39,12 +41,12 @@ class UsuarioServiceTest {
     @Test
     void guardarUsuario() {
 
-        Usuario usuario = new Usuario(null, "Pedro", "pedro@correo.cl");
+        UsuarioRequestDTO dto = new UsuarioRequestDTO("Pedro", "pedro@correo.cl");
 
-        when(repository.save(usuario))
+        when(repository.save(any(Usuario.class)))
                 .thenReturn(new Usuario(1L, "Pedro", "pedro@correo.cl"));
 
-        Usuario resultado = service.guardarUsuario(usuario);
+        UsuarioResponseDTO resultado = service.guardarUsuario(dto);
 
         assertNotNull(resultado);
         assertEquals("Pedro", resultado.getNombre());

@@ -1,5 +1,7 @@
 package com.biblioteca.ms_notificaciones.service;
 
+import com.biblioteca.ms_notificaciones.dto.NotificacionRequestDTO;
+import com.biblioteca.ms_notificaciones.dto.NotificacionResponseDTO;
 import com.biblioteca.ms_notificaciones.model.Notificacion;
 import com.biblioteca.ms_notificaciones.repository.NotificacionRepository;
 import org.junit.jupiter.api.Test;
@@ -34,7 +36,7 @@ class NotificacionServiceTest {
         when(repository.findById(1L))
                 .thenReturn(Optional.of(notificacion));
 
-        Notificacion resultado = service.obtenerNotificacionPorId(1L);
+        NotificacionResponseDTO resultado = service.obtenerNotificacionPorId(1L);
 
         assertNotNull(resultado);
         assertEquals("usuario@correo.com", resultado.getDestinatario());
@@ -43,20 +45,19 @@ class NotificacionServiceTest {
     @Test
     void guardarNotificacion() {
 
-        Notificacion notificacion = new Notificacion(
-                null,
+        NotificacionRequestDTO dto = new NotificacionRequestDTO(
                 "usuario@correo.com",
                 "Libro disponible"
         );
 
-        when(repository.save(notificacion))
+        when(repository.save(any(Notificacion.class)))
                 .thenReturn(new Notificacion(
                         1L,
                         "usuario@correo.com",
                         "Libro disponible"
                 ));
 
-        Notificacion resultado = service.guardarNotificacion(notificacion);
+        NotificacionResponseDTO resultado = service.guardarNotificacion(dto);
 
         assertNotNull(resultado);
         assertEquals(1L, resultado.getId());

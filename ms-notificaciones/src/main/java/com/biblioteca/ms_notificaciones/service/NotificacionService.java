@@ -1,10 +1,13 @@
 package com.biblioteca.ms_notificaciones.service;
 
+import com.biblioteca.ms_notificaciones.dto.NotificacionRequestDTO;
+import com.biblioteca.ms_notificaciones.dto.NotificacionResponseDTO;
 import com.biblioteca.ms_notificaciones.model.Notificacion;
 import com.biblioteca.ms_notificaciones.repository.NotificacionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class NotificacionService {
@@ -15,33 +18,44 @@ public class NotificacionService {
         this.repository = repository;
     }
 
-    public List<Notificacion> obtenerNotificaciones() {
-        return repository.findAll();
+    public List<NotificacionResponseDTO> obtenerNotificaciones() {
+        return repository.findAll().stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
     }
 
-    public Notificacion obtenerNotificacionPorId(Long id) {
-        return repository.findById(id).orElse(null);
+    public NotificacionResponseDTO obtenerNotificacionPorId(Long id) {
+        return repository.findById(id)
+                .map(this::toResponseDTO)
+                .orElse(null);
     }
 
-    public Notificacion guardarNotificacion(Notificacion notificacion) {
-        return repository.save(notificacion);
+    public NotificacionResponseDTO guardarNotificacion(NotificacionRequestDTO dto) {
+        Notificacion notificacion = new Notificacion();
+        notificacion.setDestinatario(dto.getDestinatario());
+        notificacion.setMensaje(dto.getMensaje());
+        return toResponseDTO(repository.save(notificacion));
     }
 
-    public Notificacion actualizarNotificacion(Long id, Notificacion notificacion) {
-
+    public NotificacionResponseDTO actualizarNotificacion(Long id, NotificacionRequestDTO dto) {
         Notificacion existente = repository.findById(id).orElse(null);
-
         if (existente != null) {
-            existente.setDestinatario(notificacion.getDestinatario());
-            existente.setMensaje(notificacion.getMensaje());
-
-            return repository.save(existente);
+            existente.setDestinatario(dto.getDestinatario());
+            existente.setMensaje(dto.getMensaje());
+            return toResponseDTO(repository.save(existente));
         }
-
         return null;
     }
 
     public void eliminarNotificacion(Long id) {
         repository.deleteById(id);
+    }
+
+    private NotificacionResponseDTO toResponseDTO(Notificacion notificacion) {
+        return new NotificacionResponseDTO(
+                notificacion.getId(),
+                notificacion.getDestinatario(),
+                notificacion.getMensaje()
+        );
     }
 }

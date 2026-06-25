@@ -1,5 +1,7 @@
 package com.biblioteca.ms_libros.service;
 
+import com.biblioteca.ms_libros.dto.LibroRequestDTO;
+import com.biblioteca.ms_libros.dto.LibroResponseDTO;
 import com.biblioteca.ms_libros.model.Libro;
 import com.biblioteca.ms_libros.repository.LibroRepository;
 import org.junit.jupiter.api.Test;
@@ -35,7 +37,7 @@ class LibroServiceTest {
         when(repository.findById(1L))
                 .thenReturn(Optional.of(libro));
 
-        Libro resultado = service.obtenerLibroPorId(1L);
+        LibroResponseDTO resultado = service.obtenerLibroPorId(1L);
 
         assertNotNull(resultado);
         assertEquals("El MEJOR libro del mundo!!!", resultado.getTitulo());
@@ -44,14 +46,13 @@ class LibroServiceTest {
     @Test
     void guardarLibro() {
 
-        Libro libro = new Libro(
-                null,
+        LibroRequestDTO dto = new LibroRequestDTO(
                 "El PEOR libro del mundo",
                 "John Libro",
                 21
         );
 
-        when(repository.save(libro))
+        when(repository.save(any(Libro.class)))
                 .thenReturn(new Libro(
                         1L,
                         "El PEOR libro del mundo",
@@ -59,7 +60,7 @@ class LibroServiceTest {
                         21
                 ));
 
-        Libro resultado = service.guardarLibro(libro);
+        LibroResponseDTO resultado = service.guardarLibro(dto);
 
         assertNotNull(resultado);
         assertEquals("El PEOR libro del mundo", resultado.getTitulo());

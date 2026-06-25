@@ -1,4 +1,4 @@
-package com.biblioteca.ms_prestamos.dto;
+package com.biblioteca.ms_libros.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,8 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UsuarioDTO {
+public class LibroResponseDTO {
     private Long id;
-    private String nombre;
-    private String correo;
+    private String titulo;
+    private String autor;
+    private Integer stock;
 }
